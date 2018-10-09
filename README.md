@@ -44,13 +44,10 @@ $ #rm aclImdb_v1.tar.gz
 2. Tokenization using spaCy, filtering of stop words and punctuation
 3. Tokenization using spaCy, filtering of stop words and punctuation, lemmatization
 
-Evidently, the second tokenization scheme [2] works best. Lemmatization seems to be overkill, but filtering stop words and punctuation is helpful.
+Evidently, the second tokenization scheme [2] works best. Lemmatization seems to be overkill, but filtering stop words and punctuation is helpful. It looks like the model is overfitting though, so let's adjust the learning rate next.
 
-### Number of epochs
+### Learning rate
 
-Training accuracy plateaus at epoch [5/10], validation accuracy indicates overfitting. Early stopping could be helpful, but for now we will just use [5/5] epochs for training.
-
-### N-gram size
-
+The default learning rate was set to 0.01, which is pretty high for the Adam optimizer.
 
 

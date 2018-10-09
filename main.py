@@ -6,7 +6,11 @@ import settings
 import torch_data_loader
 
 
-def trial(scheme=settings.CONFIG["scheme"], n=settings.CONFIG["ngram_size"]):
+def trial(
+    scheme=settings.CONFIG["scheme"],
+    n=settings.CONFIG["ngram_size"],
+    lr=settings.CONFIG["lr"],
+):
     """
     Run trial
     """
@@ -54,8 +58,11 @@ def trial(scheme=settings.CONFIG["scheme"], n=settings.CONFIG["ngram_size"]):
 
     # Train
     train_acc, val_acc = bow_model.train(
-        model, train_loader, val_loader)
-
+        model,
+        train_loader,
+        val_loader,
+        lr,
+    )
     return train_acc, val_acc
 
 
@@ -75,17 +82,29 @@ def main():
     # print(tokenization)
     # pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
 
-    # N-gram size
-    size = [1, 2, 3, 4]
-    ngrams = {}
-    for n in size:
-        train_acc, val_acc = trial(n=n)
-        ngrams[n] = {
+    # Learning rate (Adam; default=1e-3)
+    lr = [1e-2, 1e-3, 1e-4]
+    adam_lr = {}
+    for rate in lr:
+        train_acc, val_acc = trial(lr=rate)
+        adam_lr[rate] = {
             "train": train_acc,
             "val": val_acc,
         }
-    print(ngrams)
-    pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
+    print(adam_lr)
+    pickle.dump(adam_lr, open("results/adam_lr.pkl", "wb"))
+
+    # N-gram size
+    # size = [1]
+    # ngrams = {}
+    # for n in size:
+    #     train_acc, val_acc = trial(n=n)
+    #     ngrams[n] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(ngrams)
+    #pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
 
 
 if __name__ == "__main__":

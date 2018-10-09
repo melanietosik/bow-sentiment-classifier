@@ -62,7 +62,7 @@ def eval_model(model, loader):
     return (100 * correct / total)
 
 
-def train(model, train_loader, val_loader):
+def train(model, train_loader, val_loader, lr=settings.CONFIG["lr"]):
     """
     Train model
     """
@@ -74,7 +74,7 @@ def train(model, train_loader, val_loader):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(
         model.parameters(),
-        lr=settings.CONFIG["lr"],
+        lr=lr,
     )
 
     for epoch in range(settings.CONFIG["num_epochs"]):
@@ -104,8 +104,8 @@ def train(model, train_loader, val_loader):
 
     print("After training for n={} epochs...".format(
         settings.CONFIG["num_epochs"]))
-    print("Training accuray: {}".format(eval_model(model, train_loader)))
-    print("Validation accuray: {}".format(eval_model(model, val_loader)))
-    # print("Test accuray: {}".format(eval_model(test_loader, model)))
+    print("Training accuracy: {}".format(eval_model(model, train_loader)))
+    print("Validation accuracy: {}".format(eval_model(model, val_loader)))
+    # print("Test accuracy: {}".format(eval_model(test_loader, model)))
 
     return train_accs, val_accs

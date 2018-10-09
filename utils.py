@@ -5,6 +5,7 @@ import random
 import spacy
 
 from collections import Counter
+from itertools import chain
 from spacy.lang.en.stop_words import STOP_WORDS
 from tqdm import tqdm
 
@@ -24,11 +25,18 @@ PAD_IDX = 0
 UNK_IDX = 1
 
 
-def ngrams(text, n):
+def ngrams_(text, n):
     """
-    Generate n-grams from input text
+    Generate exactly n n-grams
     """
     return zip(*[text[i:] for i in range(n)])
+
+
+def ngrams(text, n):
+    """
+    Generate up to n<=n n-grams
+    """
+    return chain(*[ngrams_(text, i) for i in range(n)])
 
 
 def preprocess(text, version, n):
