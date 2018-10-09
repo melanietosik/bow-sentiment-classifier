@@ -6,10 +6,7 @@ import settings
 import torch_data_loader
 
 
-def trial(
-    scheme=settings.CONFIG["scheme"],
-    n=settings.CONFIG["ngram_size"],
-):
+def trial(scheme=settings.CONFIG["scheme"], n=settings.CONFIG["ngram_size"]):
     """
     Run trial
     """
@@ -88,6 +85,7 @@ def main():
             "val": val_acc,
         }
     print(ngrams)
+    pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
 
 
 if __name__ == "__main__":

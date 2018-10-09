@@ -10,9 +10,9 @@ RESULTS_DIR = "results/"
 NUM_CLASSES = 2
 
 CONFIG = {
-    "scheme": 0,
+    "scheme": 2,
     "num_epochs": 5,
-    "ngram_size": 1,
+    "ngram_size": -1,
     "max_vocab_size": 10000,
     "emb_dim": 100,
     "lr": 0.01,
