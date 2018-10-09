@@ -6,7 +6,7 @@ import settings
 import torch_data_loader
 
 
-def trial(scheme):
+def trial(scheme=settings.CONFIG["scheme"]):
     """
     Run trial
     """
@@ -63,17 +63,18 @@ def main():
     """
     Ablation study
     """
-    # Tokenization schemes
-    schemes = [0, 1, 2, 3]
-    tokenization = {}
-    for scheme in schemes:
-        train_acc, val_acc = trial(scheme)
-        tokenization[scheme] = {
-            "train": train_acc,
-            "val": val_acc,
-        }
-    print(tokenization)
-    pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
+    # # Tokenization schemes
+    # schemes = [0, 1, 2, 3]
+    # tokenization = {}
+    # for scheme in schemes:
+    #     train_acc, val_acc = trial(scheme)
+    #     tokenization[scheme] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(tokenization)
+    # pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
+    trial()
 
 
 if __name__ == "__main__":

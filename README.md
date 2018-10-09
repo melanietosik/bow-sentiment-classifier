@@ -8,12 +8,9 @@ $ conda create -n bow python=3.6
 $ source activate bow
 $ conda install -c conda-forge spacy
 $ python -m spacy download en
-$ conda install pytorch torchvision -c pytorch
+$ #(loc) conda install pytorch torchvision -c pytorch
 $ #(HPC) pip install torch torchvision
 ```
-
-# module load anaconda3/4.3.1 cuda/9.0.176 cudnn/9.0v7.0.5
-# du -h --max-depth=0 * | sort -hr
 
 ## Data
 
@@ -31,23 +28,29 @@ $ #rm aclImdb_v1.tar.gz
 
 ## Ablation study
 
-### Baseline
-
-- Tokenization: `string.split()`
-- Vocabulary size: `10,000`
-- Embedding size: `100`
-- N-gram size: `1`
-- Optimizer: `Adam`
-- Learning rate: `0.01`
-- Number of epochs: `10`
-- Dropout: `n/a`
-- [fixed] Maximum sentence length: `200`
-- [fixed] Batch size: `32`
-
+- Tokenzation schemes
+- Number of epochs
+- N-gram size
+- Vocabulary size
+- Embedding size
+- Optimimizer
+- Learning rate
+- Dropout
 
 ### Tokenization
 
+0. Baseline (`string.split()`)
 1. Tokenization using spaCy
-2. Enhanced preprocessing using spaCy tokenization and filtering of stop words and punctuation
-3. Enhanced preprocessing using spaCy tokenization, filtering of stop words and punctuation, and lemmatization
+2. Tokenization using spaCy, filtering of stop words and punctuation
+3. Tokenization using spaCy, filtering of stop words and punctuation, lemmatization
+
+Evidently, the second tokenization scheme [2] works best. Lemmatization seems to be overkill, but filtering stop words and punctuation is helpful.
+
+### Number of epochs
+
+Training accuracy plateaus at epoch [5/10], validation accuracy indicates overfitting. Early stopping could be helpful, but for now we will just use [5/5] epochs for training.
+
+### N-gram size
+
+
 

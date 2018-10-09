@@ -5,14 +5,17 @@ TEST_POS = "data/aclImdb/test/pos"
 TEST_NEG = "data/aclImdb/test/neg"
 
 DATA_DIR = "data/"
+RESULTS_DIR = "results/"
 
 NUM_CLASSES = 2
 
 CONFIG = {
+    "scheme": 0,
+    "num_epochs": 5,
+    "ngram_size": 1,
     "max_vocab_size": 10000,
-    "max_sent_len": 200,
-    "batch_size": 32,
     "emb_dim": 100,
     "lr": 0.01,
-    "num_epochs": 5,
+    "max_sent_len": 200,
+    "batch_size": 32,
 }
