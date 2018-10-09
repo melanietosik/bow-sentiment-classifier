@@ -36,7 +36,7 @@ def ngrams(text, n):
     """
     Generate up to n<=n n-grams
     """
-    return chain(*[ngrams_(text, i) for i in range(n)])
+    return chain(*[ngrams_(text, i) for i in range(n + 1)])
 
 
 def preprocess(text, version, n):

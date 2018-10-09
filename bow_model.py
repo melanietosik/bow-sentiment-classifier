@@ -94,12 +94,13 @@ def train(model, train_loader, val_loader, lr=settings.CONFIG["lr"]):
                 train_accs.append(train_acc)
                 val_accs.append(val_acc)
                 print(
-                    "Epoch: [{}/{}], Step: [{}/{}], Validation accuracy: {}".format(
+                    "Epoch: [{}/{}], Step: [{}/{}], Validation accuracy: {}, Training accuracy: {}".format(
                         epoch + 1,
                         settings.CONFIG["num_epochs"],
                         i + 1,
                         len(train_loader),
                         val_acc,
+                        train_acc,
                     ))
 
     print("After training for n={} epochs...".format(

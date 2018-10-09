@@ -82,29 +82,29 @@ def main():
     # print(tokenization)
     # pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
 
-    # Learning rate (Adam; default=1e-3)
-    lr = [1e-2, 1e-3, 1e-4]
-    adam_lr = {}
-    for rate in lr:
-        train_acc, val_acc = trial(lr=rate)
-        adam_lr[rate] = {
-            "train": train_acc,
-            "val": val_acc,
-        }
-    print(adam_lr)
-    pickle.dump(adam_lr, open("results/adam_lr.pkl", "wb"))
-
-    # N-gram size
-    # size = [1]
-    # ngrams = {}
-    # for n in size:
-    #     train_acc, val_acc = trial(n=n)
-    #     ngrams[n] = {
+    # # Learning rate (Adam; default: 1e-3)
+    # lr = [1e-2, 1e-3, 1e-4]
+    # adam_lr = {}
+    # for rate in lr:
+    #     train_acc, val_acc = trial(lr=rate)
+    #     adam_lr[rate] = {
     #         "train": train_acc,
     #         "val": val_acc,
     #     }
-    # print(ngrams)
-    #pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
+    # print(adam_lr)
+    # pickle.dump(adam_lr, open("results/adam_lr.pkl", "wb"))
+
+    # N-gram size
+    size = [1, 2, 3, 4]
+    ngrams = {}
+    for n in size:
+        train_acc, val_acc = trial(n=n)
+        ngrams[n] = {
+            "train": train_acc,
+            "val": val_acc,
+        }
+    print(ngrams)
+    pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
 
 
 if __name__ == "__main__":

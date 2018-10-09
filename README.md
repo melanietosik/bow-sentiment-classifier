@@ -48,6 +48,17 @@ Evidently, the second tokenization scheme [2] works best. Lemmatization seems to
 
 ### Learning rate
 
-The default learning rate was set to 0.01, which is pretty high for the Adam optimizer.
+The default learning rate was set to 0.01, which is pretty high for the Adam optimizer. Evaluating:
+	
+	- 1e-2: clearly overfitting
+	- 1e-3: pretty good
+	- 1e-4: too slow
+
+Going to stick with 1e-3 and reduce the number of epochs from 10 to 2.
+
+### N-gram size
+
+
+
 
 
