@@ -24,17 +24,26 @@ PAD_IDX = 0
 UNK_IDX = 1
 
 
-def preprocess(text, version):
+def ngrams(text, n):
+    """
+    Generate n-grams from input text
+    """
+    return zip(*[text[i:] for i in range(n)])
+
+
+def preprocess(text, version, n):
     """
     Preprocessing
     """
     # Scheme 0
     if version == 0:
-        return text.split()
+        prep = text.split()
+        return ["_".join(ngram) for ngram in ngrams(prep, n)]
     # Scheme 1
     elif version == 1:
         doc = nlp(text)
-        return [tok.text for tok in text]
+        prep = [tok.text for tok in text]
+        return ["_".join(ngram) for ngram in ngrams(prep, n)]
     # Scheme 2
     elif version == 2:
         doc = nlp(text)
@@ -45,7 +54,7 @@ def preprocess(text, version):
                     pass
                 else:
                     prep.append(tok.lower_)
-        return prep
+        return ["_".join(ngram) for ngram in ngrams(prep, n)]
     # Scheme 3
     elif version == 3:
         doc = nlp(text)
@@ -56,13 +65,13 @@ def preprocess(text, version):
                     pass
                 else:
                     prep.append(tok.lemma_)
-        return prep
+        return ["_".join(ngram) for ngram in ngrams(prep, n)]
     else:
         print("Invalid tokenization scheme, exiting")
         exit()
 
 
-def preprocess_dataset(version):
+def preprocess_dataset(version, n):
     """
     """
     data = []
@@ -74,7 +83,7 @@ def preprocess_dataset(version):
         for file in tqdm(os.listdir(dir_)):
             if file.endswith(".txt"):
                 text = open(os.path.join(dir_, file), "r").read()
-                data.append((preprocess(text, version), label))
+                data.append((preprocess(text, version, n), label))
 
     # Shuffle training data
     random.shuffle(data)
@@ -92,27 +101,16 @@ def preprocess_dataset(version):
     print("# train toks:", len(train_toks))
     print("# val toks:", len(val_toks))
 
-    pickle.dump(
-        train,
-        open(settings.DATA_DIR + "train.{}.pkl".format(version), "wb"))
-    pickle.dump(
-        train_toks,
-        open(settings.DATA_DIR + "train.{}.toks.pkl".format(version), "wb"))
-    pickle.dump(
-        val,
-        open(settings.DATA_DIR + "val.{}.pkl".format(version), "wb"))
-    pickle.dump(
-        val_toks,
-        open(settings.DATA_DIR + "val.{}.toks.pkl".format(version), "wb"))
+    pickle.dump(train, open(
+        settings.DATA_DIR + "train.{}.n={}.pkl".format(version, n), "wb"))
+    pickle.dump(train_toks, open(
+        settings.DATA_DIR + "train.{}.n={}.toks.pkl".format(version, n), "wb"))
+    pickle.dump(val, open(
+        settings.DATA_DIR + "val.{}.n={}.pkl".format(version, n), "wb"))
+    pickle.dump(val_toks, open(
+        settings.DATA_DIR + "val.{}.n={}.toks.pkl".format(version, n), "wb"))
 
     return train, train_toks, val, val_toks
-
-
-def ngrams(toks, n):
-    """
-    Generate n-grams from input text
-    """
-    return zip(*[toks[i:] for i in range(n)])
 
 
 def build_vocab(toks):
@@ -124,8 +122,7 @@ def build_vocab(toks):
         dictionary;
         keys represent tokens, corresponding values represent indices
     """
-    #ngram_cnt = Counter(toks)
-    ngram_cnt = Counter(ngrams(toks, settings.CONFIG["ngram_size"]))
+    ngram_cnt = Counter(toks)
     vocab, cnt = zip(*ngram_cnt.most_common(settings.CONFIG["max_vocab_size"]))
 
     id2token = list(vocab)
@@ -152,6 +149,4 @@ def tok2idx_data(token2id, tok_data):
         idx_lst = [
             token2id[tok] if tok in token2id else UNK_IDX for tok in toks]
         idx_data.append(idx_lst)
-    print(idx_data)
-    input()
     return idx_data

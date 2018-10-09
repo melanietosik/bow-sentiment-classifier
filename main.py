@@ -6,25 +6,28 @@ import settings
 import torch_data_loader
 
 
-def trial(scheme=settings.CONFIG["scheme"]):
+def trial(
+    scheme=settings.CONFIG["scheme"],
+    n=settings.CONFIG["ngram_size"],
+):
     """
     Run trial
     """
     try:
         # Load preprocessed data
         print("Loading data...")
-        train = pickle.load(
-            open(settings.DATA_DIR + "train.{}.pkl".format(scheme), "rb"))
-        train_toks = pickle.load(
-            open(settings.DATA_DIR + "train.{}.toks.pkl".format(scheme), "rb"))
-        val = pickle.load(
-            open(settings.DATA_DIR + "val.{}.pkl".format(scheme), "rb"))
-        val_toks = pickle.load(
-            open(settings.DATA_DIR + "val.{}.toks.pkl".format(scheme), "rb"))
+        train = pickle.load(open(
+            settings.DATA_DIR + "train.{}.n={}.pkl".format(scheme, n), "rb"))
+        train_toks = pickle.load(open(
+            settings.DATA_DIR + "train.{}.n={}.toks.pkl".format(scheme, n), "rb"))
+        val = pickle.load(open(
+            settings.DATA_DIR + "val.{}.n={}.pkl".format(scheme, n), "rb"))
+        val_toks = pickle.load(open(
+            settings.DATA_DIR + "val.{}.n={}.toks.pkl".format(scheme, n), "rb"))
     except Exception:
         # Preprocess data
         print("Data not found, preprocessing...")
-        train, train_toks, val, val_toks = utils.preprocess_dataset(scheme)
+        train, train_toks, val, val_toks = utils.preprocess_dataset(scheme, n)
 
     # Split data samples and targets
     train_samples, train_targets = zip(*train)
@@ -74,7 +77,17 @@ def main():
     #     }
     # print(tokenization)
     # pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
-    trial()
+
+    # N-gram size
+    size = [1, 2, 3, 4]
+    ngrams = {}
+    for n in size:
+        train_acc, val_acc = trial(n=n)
+        ngrams[n] = {
+            "train": train_acc,
+            "val": val_acc,
+        }
+    print(ngrams)
 
 
 if __name__ == "__main__":
