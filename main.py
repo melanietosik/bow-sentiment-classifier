@@ -48,8 +48,7 @@ def main(prep="prep_0"):
 
     # BOW model
     print("Building BOW model...")
-    EMD_DIM = 100
-    model = bow_model.BOW(len(id2token), EMD_DIM)
+    model = bow_model.BOW(len(id2token))
 
     # Train
     bow_model.train(model, train_loader, val_loader)
@@ -57,4 +56,3 @@ def main(prep="prep_0"):
 
 if __name__ == "__main__":
     main()
-

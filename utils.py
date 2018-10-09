@@ -2,30 +2,52 @@ import os
 import pickle
 import random
 
-from collections import Counter
 import spacy
+
+from collections import Counter
+from spacy.lang.en.stop_words import STOP_WORDS
 
 import settings
 
 nlp = spacy.load(
     "en",
-    # disable=[
-    #     "tagger,"
-    #     "parser",
-    # ]
+    disable=[
+        "tagger,"
+        "parser",
+        "ner",
+    ]
 )
-# nlp.add_pipe(nlp.create_pipe("sentencizer"))
+nlp.add_pipe(nlp.create_pipe("sentencizer"))
 
-MAX_VOCAB_SIZE = 10000
 PAD_IDX = 0
 UNK_IDX = 1
 
 
 def preprocess_0(text):
+    """
+    Preprocessing v0
+    """
     return text.split()
 
 
-def preprocess_dataset(prep="prep_0"):
+def preprocess_1(text):
+    """
+    Preprocessing v1
+    [Filter punctuation, digits, stop words;
+    lowercase]
+    """
+    doc = nlp(text)
+    prep = []
+    for tok in doc:
+        if tok.is_alpha:
+            if (tok.lower_ in STOP_WORDS) or (tok.lemma_ in STOP_WORDS):
+                pass
+            else:
+                prep.append(tok.lower_)
+    return prep
+
+
+def preprocess_dataset(prep):
     """
     """
     data = []
@@ -38,6 +60,8 @@ def preprocess_dataset(prep="prep_0"):
                 text = open(os.path.join(dir_, file), "r").read()
                 if prep == "prep_0":
                     data.append((preprocess_0(text), label))
+                if prep == "prep_1":
+                    data.append((preprocess_1(text), label))
 
     # Shuffle training data
     random.shuffle(data)
@@ -56,13 +80,17 @@ def preprocess_dataset(prep="prep_0"):
     print("# val toks:", len(val_toks))
 
     pickle.dump(
-        train, open(settings.DATA_DIR + "train.prep_0.pkl", "wb"))
+        train,
+        open(settings.DATA_DIR + "train.{}.pkl".format(prep), "wb"))
     pickle.dump(
-        train_toks, open(settings.DATA_DIR + "train.prep_0.toks.pkl", "wb"))
+        train_toks,
+        open(settings.DATA_DIR + "train.{}.toks.pkl".format(prep), "wb"))
     pickle.dump(
-        val, open(settings.DATA_DIR + "val.prep_0.pkl", "wb"))
+        val,
+        open(settings.DATA_DIR + "val.{}.pkl".format(prep), "wb"))
     pickle.dump(
-        val_toks, open(settings.DATA_DIR + "val.prep_0.toks.pkl", "wb"))
+        val_toks,
+        open(settings.DATA_DIR + "val.{}.toks.pkl".format(prep), "wb"))
 
     return train, train_toks, val, val_toks
 
@@ -77,7 +105,7 @@ def build_vocab(toks):
         keys represent tokens, corresponding values represent indices
     """
     tok_cnt = Counter(toks)
-    vocab, cnt = zip(*tok_cnt.most_common(MAX_VOCAB_SIZE))
+    vocab, cnt = zip(*tok_cnt.most_common(settings.CONFIG["max_vocab_size"]))
 
     id2token = list(vocab)
     token2id = dict(zip(vocab, range(2, 2 + len(vocab))))

@@ -2,20 +2,28 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import settings
+
 
 class BOW(nn.Module):
     """
     Bag-of-words (BOW) classification model
     """
-
-    def __init__(self, vocab_size, emb_dim):
+    def __init__(self, vocab_size, emd_dim):
         """
         @param vocab_size: size of the vocabulary
         @param emb_dim: size of the word embedding
         """
         super(BOW, self).__init__()
-        self.embed = nn.Embedding(vocab_size, emb_dim, padding_idx=0)  # !!
-        self.linear = nn.Linear(emb_dim, 2)  # 2 classes
+        self.embed = nn.Embedding(
+            vocab_size,
+            settings.CONFIG["emb_dim"],
+            padding_idx=0,  # !!
+        )
+        self.linear = nn.Linear(
+            settings.CONFIG["emb_dim"],
+            settings.NUM_CLASSES,
+        )
 
     def forward(self, data, length):
         """
@@ -42,7 +50,9 @@ def test_model(model, loader):
     """
     correct = 0
     total = 0
+
     model.eval()
+
     for data, lengths, labels in loader:
         data_batch, length_batch, label_batch = data, lengths, labels
         outputs = F.softmax(model(data_batch, length_batch), dim=1)
@@ -56,17 +66,14 @@ def train(model, train_loader, val_loader):
     """
     Train model
     """
-    LEARNING_RATE = 0.01
-    NUM_EPOCHS = 10
-
     # Criterion and optimizer
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(
         model.parameters(),
-        lr=LEARNING_RATE,
+        lr=settings.CONFIG["lr"],
     )
 
-    for epoch in range(NUM_EPOCHS):
+    for epoch in range(settings.CONFIG["num_epochs"]):
         for i, (data, lengths, labels) in enumerate(train_loader):
             model.train()
             data_batch, length_batch, label_batch = data, lengths, labels
@@ -83,12 +90,13 @@ def train(model, train_loader, val_loader):
                     "Epoch: [{}/{}], Step: [{}/{}], \
                         Validation accuracy: {}".format(
                         epoch + 1,
-                        NUM_EPOCHS,
+                        settings.CONFIG["num_epochs"],
                         i + 1,
                         len(train_loader),
                         val_acc,
                     ))
 
-    print("After training for n={} epochs...".format(NUM_EPOCHS))
+    print("After training for n={} epochs...".format(
+        settings.CONFIG["num_epochs"]))
     print("Validation accuray: {}".format(test_model(val_loader, model)))
     # print("Test accuray: {}".format(test_model(test_loader, model)))

@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 
-MAX_SENTENCE_LENGTH = 200
+import settings
 
 
 class IMBDDataset(Dataset):
@@ -27,7 +27,7 @@ class IMBDDataset(Dataset):
         """
         Triggered when calling dataset[i]
         """
-        token_idx = self.data_list[key][:MAX_SENTENCE_LENGTH]
+        token_idx = self.data_list[key][:settings.CONFIG["max_sent_len"]]
         label = self.target_list[key]
         return [token_idx, len(token_idx), label]
 
@@ -41,7 +41,7 @@ def review_collate_func(batch):
     label_list = []
     length_list = []
     # print("collate batch: ", batch[0][0])
-    # batch[0][0] = batch[0][0][:MAX_SENTENCE_LENGTH]
+    # batch[0][0] = batch[0][0][:settings.CONFIG["max_sent_len"]]
 
     for datum in batch:
         label_list.append(datum[2])
@@ -49,9 +49,16 @@ def review_collate_func(batch):
 
     # Padding
     for datum in batch:
-        padded_vec = np.pad(np.array(datum[0]),
-                            pad_width=((0, MAX_SENTENCE_LENGTH - datum[1])),
-                            mode="constant", constant_values=0)
+        padded_vec = np.pad(
+            np.array(datum[0]),
+            pad_width=(
+                (
+                    0,
+                    settings.CONFIG["max_sent_len"] - datum[1]
+                )),
+            mode="constant",
+            constant_values=0,
+        )
         data_list.append(padded_vec)
     return [
         torch.from_numpy(np.array(data_list)),
@@ -64,12 +71,10 @@ def get(idx, targets, shuffle):
     """
     Helper function
     """
-    BATCH_SIZE = 32
-
     dataset = IMBDDataset(idx, targets)
     loader = torch.utils.data.DataLoader(
         dataset=dataset,
-        batch_size=BATCH_SIZE,
+        batch_size=settings.CONFIG["batch_size"],
         collate_fn=review_collate_func,
         shuffle=shuffle,
     )
