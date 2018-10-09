@@ -9,7 +9,7 @@ class BOW(nn.Module):
     """
     Bag-of-words (BOW) classification model
     """
-    def __init__(self, vocab_size, emd_dim):
+    def __init__(self, vocab_size):
         """
         @param vocab_size: size of the vocabulary
         @param emb_dim: size of the word embedding
@@ -43,7 +43,7 @@ class BOW(nn.Module):
         return out
 
 
-def test_model(model, loader):
+def eval_model(model, loader):
     """
     Helper function to test model performance on given dataset
     @param: data loader for the dataset to test against
@@ -66,6 +66,10 @@ def train(model, train_loader, val_loader):
     """
     Train model
     """
+    # Save accuracies for plotting
+    train_accs = []
+    val_accs = []
+
     # Criterion and optimizer
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(
@@ -85,10 +89,12 @@ def train(model, train_loader, val_loader):
 
             # Validate every 100 iterations
             if i > 0 and i % 100 == 0:
-                val_acc = test_model(model, val_loader)
+                train_acc = eval_model(model, train_loader)
+                val_acc = eval_model(model, val_loader)
+                train_accs.append(train_acc)
+                val_accs.append(val_acc)
                 print(
-                    "Epoch: [{}/{}], Step: [{}/{}], \
-                        Validation accuracy: {}".format(
+                    "Epoch: [{}/{}], Step: [{}/{}], Validation accuracy: {}".format(
                         epoch + 1,
                         settings.CONFIG["num_epochs"],
                         i + 1,
@@ -98,5 +104,8 @@ def train(model, train_loader, val_loader):
 
     print("After training for n={} epochs...".format(
         settings.CONFIG["num_epochs"]))
-    print("Validation accuray: {}".format(test_model(val_loader, model)))
-    # print("Test accuray: {}".format(test_model(test_loader, model)))
+    print("Training accuray: {}".format(eval_model(model, train_loader)))
+    print("Validation accuray: {}".format(eval_model(model, val_loader)))
+    # print("Test accuray: {}".format(eval_model(test_loader, model)))
+
+    return train_accs, val_accs

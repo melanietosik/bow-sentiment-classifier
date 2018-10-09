@@ -6,23 +6,25 @@ import settings
 import torch_data_loader
 
 
-def main(prep="prep_0"):
+def trial(scheme):
     """
+    Run trial
     """
-    print("Loading data...")
     try:
         # Load preprocessed data
+        print("Loading data...")
         train = pickle.load(
-            open(settings.DATA_DIR + "train.{}.pkl".format(prep), "rb"))
+            open(settings.DATA_DIR + "train.{}.pkl".format(scheme), "rb"))
         train_toks = pickle.load(
-            open(settings.DATA_DIR + "train.{}.toks.pkl".format(prep), "rb"))
+            open(settings.DATA_DIR + "train.{}.toks.pkl".format(scheme), "rb"))
         val = pickle.load(
-            open(settings.DATA_DIR + "val.{}.pkl".format(prep), "rb"))
+            open(settings.DATA_DIR + "val.{}.pkl".format(scheme), "rb"))
         val_toks = pickle.load(
-            open(settings.DATA_DIR + "val.{}.toks.pkl".format(prep), "rb"))
+            open(settings.DATA_DIR + "val.{}.toks.pkl".format(scheme), "rb"))
     except Exception:
         # Preprocess data
-        train, train_toks, val, val_toks = utils.preprocess_dataset("prep_0")
+        print("Data not found, preprocessing...")
+        train, train_toks, val, val_toks = utils.preprocess_dataset(scheme)
 
     # Split data samples and targets
     train_samples, train_targets = zip(*train)
@@ -51,7 +53,27 @@ def main(prep="prep_0"):
     model = bow_model.BOW(len(id2token))
 
     # Train
-    bow_model.train(model, train_loader, val_loader)
+    train_acc, val_acc = bow_model.train(
+        model, train_loader, val_loader)
+
+    return train_acc, val_acc
+
+
+def main():
+    """
+    Ablation study
+    """
+    # Tokenization schemes
+    schemes = [0, 1, 2, 3]
+    tokenization = {}
+    for scheme in schemes:
+        train_acc, val_acc = trial(scheme)
+        tokenization[scheme] = {
+            "train": train_acc,
+            "val": val_acc,
+        }
+    print(tokenization)
+    pickle.dump(tokenization, open("results/tokenization.pkl", "wb"))
 
 
 if __name__ == "__main__":

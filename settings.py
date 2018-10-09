@@ -14,5 +14,5 @@ CONFIG = {
     "batch_size": 32,
     "emb_dim": 100,
     "lr": 0.01,
-    "num_epochs": 10,
+    "num_epochs": 5,
 }

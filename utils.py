@@ -6,6 +6,7 @@ import spacy
 
 from collections import Counter
 from spacy.lang.en.stop_words import STOP_WORDS
+from tqdm import tqdm
 
 import settings
 
@@ -23,31 +24,45 @@ PAD_IDX = 0
 UNK_IDX = 1
 
 
-def preprocess_0(text):
+def preprocess(text, version):
     """
-    Preprocessing v0
+    Preprocessing
     """
-    return text.split()
+    # Scheme 0
+    if version == 0:
+        return text.split()
+    # Scheme 1
+    elif version == 1:
+        doc = nlp(text)
+        return [tok.text for tok in text]
+    # Scheme 2
+    elif version == 2:
+        doc = nlp(text)
+        prep = []
+        for tok in doc:
+            if tok.is_alpha:
+                if (tok.lower_ in STOP_WORDS) or (tok.lemma_ in STOP_WORDS):
+                    pass
+                else:
+                    prep.append(tok.lower_)
+        return prep
+    # Scheme 3
+    elif version == 3:
+        doc = nlp(text)
+        prep = []
+        for tok in doc:
+            if tok.is_alpha:
+                if (tok.lower_ in STOP_WORDS) or (tok.lemma_ in STOP_WORDS):
+                    pass
+                else:
+                    prep.append(tok.lemma_)
+        return prep
+    else:
+        print("Invalid tokenization scheme, exiting")
+        exit()
 
 
-def preprocess_1(text):
-    """
-    Preprocessing v1
-    [Filter punctuation, digits, stop words;
-    lowercase]
-    """
-    doc = nlp(text)
-    prep = []
-    for tok in doc:
-        if tok.is_alpha:
-            if (tok.lower_ in STOP_WORDS) or (tok.lemma_ in STOP_WORDS):
-                pass
-            else:
-                prep.append(tok.lower_)
-    return prep
-
-
-def preprocess_dataset(prep):
+def preprocess_dataset(version):
     """
     """
     data = []
@@ -55,13 +70,11 @@ def preprocess_dataset(prep):
 
     # Training and validation set
     for label, dir_ in enumerate([settings.TRAIN_POS, settings.TRAIN_NEG]):
-        for file in os.listdir(dir_):
+        print(dir_)
+        for file in tqdm(os.listdir(dir_)):
             if file.endswith(".txt"):
                 text = open(os.path.join(dir_, file), "r").read()
-                if prep == "prep_0":
-                    data.append((preprocess_0(text), label))
-                if prep == "prep_1":
-                    data.append((preprocess_1(text), label))
+                data.append((preprocess(text, version), label))
 
     # Shuffle training data
     random.shuffle(data)
@@ -81,16 +94,16 @@ def preprocess_dataset(prep):
 
     pickle.dump(
         train,
-        open(settings.DATA_DIR + "train.{}.pkl".format(prep), "wb"))
+        open(settings.DATA_DIR + "train.{}.pkl".format(version), "wb"))
     pickle.dump(
         train_toks,
-        open(settings.DATA_DIR + "train.{}.toks.pkl".format(prep), "wb"))
+        open(settings.DATA_DIR + "train.{}.toks.pkl".format(version), "wb"))
     pickle.dump(
         val,
-        open(settings.DATA_DIR + "val.{}.pkl".format(prep), "wb"))
+        open(settings.DATA_DIR + "val.{}.pkl".format(version), "wb"))
     pickle.dump(
         val_toks,
-        open(settings.DATA_DIR + "val.{}.toks.pkl".format(prep), "wb"))
+        open(settings.DATA_DIR + "val.{}.toks.pkl".format(version), "wb"))
 
     return train, train_toks, val, val_toks
 
