@@ -81,7 +81,4 @@ Not helpful.
 
 #### Number of epochs
 
-
-
-
-
+Training for `2` epochs seems sufficient, otherwise the model starts to overfit on the training data.

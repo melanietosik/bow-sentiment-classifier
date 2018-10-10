@@ -46,7 +46,7 @@ class BOW(nn.Module):
         return out
 
 
-def eval_model(model, loader):
+def eval_model(model, loader, inspect=False):
     """
     Helper function to test model performance on given dataset
     @param: data loader for the dataset to test against
@@ -60,8 +60,31 @@ def eval_model(model, loader):
         data_batch, length_batch, label_batch = data, lengths, labels
         outputs = F.softmax(model(data_batch, length_batch), dim=1)
         predicted = outputs.max(1, keepdim=True)[1]
+        # print(predicted.ne(labels.view_as(predicted)))
         total += labels.size(0)
         correct += predicted.eq(labels.view_as(predicted)).sum().item()
+
+        if inspect:
+            right_preds = []
+            wrong_preds = []
+            right_batched = predicted.eq(labels.view_as(predicted))
+            # Correct
+            for i, right in enumerate(right_batched):
+                right = right.item()
+                if right:
+                    right_preds.append(data_batch[i].numpy())
+                if len(right_preds) == 3:
+                    break
+            # Incorrect
+            for i, right in enumerate(right_batched):
+                right = right.item()
+                if right:
+                    continue
+                wrong_preds.append(data_batch[i].numpy())
+                if len(wrong_preds) == 3:
+                    break
+            return right_preds, wrong_preds
+
     return (100 * correct / total)
 
 
@@ -106,6 +129,7 @@ def train(
         for i, (data, lengths, labels) in enumerate(train_loader):
             model.train()
             data_batch, length_batch, label_batch = data, lengths, labels
+
             optimizer.zero_grad()
             outputs = model(data_batch, length_batch)
             loss = criterion(outputs, label_batch)

@@ -15,7 +15,7 @@ def trial(
     optim=settings.CONFIG["optim"],
     lin_ann=settings.CONFIG["lin_ann"],
     num_epochs=settings.CONFIG["num_epochs"],
-    test=True,
+    test=False,
 ):
     """
     Run trial
@@ -93,6 +93,17 @@ def trial(
         test_loader = torch_data_loader.get(test_idxs, test_targets, shuffle=False)
         print("Testing accuracy: {}".format(
             bow_model.eval_model(model, test_loader)))
+
+        # Identify correct/incorrect predictions
+        right, wrong = bow_model.eval_model(model, val_loader, inspect=True)
+        print("Validation samples with correct predictions:")
+        for i, item in enumerate(right):
+            text = " ".join([id2token[idx] for idx in item if idx > 0])
+            print("#{}\n {}".format(i + 1, text))
+        print("Validation samples with incorrect predictions:")
+        for i, item in enumerate(wrong):
+            text = " ".join([id2token[idx] for idx in item if idx > 0])
+            print("#{}\n {}".format(i + 1, text))
 
     return train_acc, val_acc
 
@@ -195,7 +206,7 @@ def main():
     # print(results)
     # pickle.dump(results, open("results/num_epochs.pkl", "wb"))
 
-    trial()
+    trial(test=True)
 
 
 if __name__ == "__main__":
