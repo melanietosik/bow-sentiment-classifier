@@ -2,6 +2,8 @@
 
 [Natural Language Processing with Representation Learning (DS-GA 1011)](https://docs.google.com/document/d/1o0TTWocbkqPa9qsTCXnEFXf3NZzwZLLLSw7SSZmNla8/edit#)
 
+For the full write-up of the results, please see [report.pdf](https://github.com/melanietosik/bow-sentiment-classifier/blob/master/report.pdf).
+
 ## Requirements
 
 ```
@@ -10,6 +12,7 @@ $ conda create -n bow python=3.6
 $ source activate bow
 $ conda install -c conda-forge spacy
 $ python -m spacy download en
+$ conda install -c conda-forge matplotlib
 $ #(loc) conda install pytorch torchvision -c pytorch
 $ #(HPC) pip install torch torchvision
 ```
@@ -29,6 +32,13 @@ $ #rm aclImdb_v1.tar.gz
 ```
 
 ## Overview
+
+Run the following command in the root directory of the project to reproduce the final trial:
+
+```
+$ #[set up conda env and install requirements]
+$ python main.py
+```
 
 See `main.py` for the main script to run. Change default parameter settings in `settings.py`. Slightly modified versions of the lab code can be found in `bow_model.py` and `torch_data_loader.py`. The `utils.py` script contains all of the preprocessing code. Finally, the plots and result tables are generated in `plot.py` (see also `plots/` and `results/`).
 
