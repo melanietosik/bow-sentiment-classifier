@@ -15,6 +15,7 @@ def trial(
     optim=settings.CONFIG["optim"],
     lin_ann=settings.CONFIG["lin_ann"],
     num_epochs=settings.CONFIG["num_epochs"],
+    test=True,
 ):
     """
     Run trial
@@ -71,6 +72,28 @@ def trial(
         lin_ann,
         num_epochs,
     )
+
+    """
+    Test set evaluation
+    """
+    if test:
+        try:
+            # Load preprocessed data
+            print("Loading test data...")
+            test = pickle.load(open(
+                settings.DATA_DIR + "test.{}.n={}.pkl".format(scheme, n), "rb"))
+            test_toks = pickle.load(open(
+                settings.DATA_DIR + "test.{}.n={}.toks.pkl".format(scheme, n), "rb"))
+        except Exception:
+            # Preprocess test data
+            test, test_toks = utils.preprocess_testset(scheme, n)
+
+        test_samples, test_targets = zip(*test)
+        test_idxs = utils.tok2idx_data(token2id, test_samples)
+        test_loader = torch_data_loader.get(test_idxs, test_targets, shuffle=False)
+        test_acc = bow_model.eval_model(test_loader, bow_model)
+        print("Test accuracy: {}".format(test_acc))
+
     return train_acc, val_acc
 
 
@@ -159,18 +182,20 @@ def main():
     # print(results)
     # pickle.dump(results, open("results/annealing.pkl", "wb"))
 
-    # Number of epochs
-    epochs = [2, 5, 10]
-    results = {}
-    for epoch in epochs:
-        print("epoch:", epoch)
-        train_acc, val_acc = trial(num_epochs=epoch)
-        results[epoch] = {
-            "train": train_acc,
-            "val": val_acc,
-        }
-    print(results)
-    pickle.dump(results, open("results/num_epochs.pkl", "wb"))
+    # # Number of epochs
+    # epochs = [2, 5, 10]
+    # results = {}
+    # for epoch in epochs:
+    #     print("epoch:", epoch)
+    #     train_acc, val_acc = trial(num_epochs=epoch)
+    #     results[epoch] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(results)
+    # pickle.dump(results, open("results/num_epochs.pkl", "wb"))
+
+    trial()
 
 
 if __name__ == "__main__":

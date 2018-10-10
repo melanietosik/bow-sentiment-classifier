@@ -82,9 +82,9 @@ def preprocess(text, version, n):
 
 def preprocess_dataset(version, n):
     """
+    Preprocess training/validation set
     """
     data = []
-    # test = []
 
     # Training and validation set
     for label, dir_ in enumerate([settings.TRAIN_POS, settings.TRAIN_NEG]):
@@ -120,6 +120,32 @@ def preprocess_dataset(version, n):
         settings.DATA_DIR + "val.{}.n={}.toks.pkl".format(version, n), "wb"))
 
     return train, train_toks, val, val_toks
+
+
+def preprocess_testset(version, n):
+    """
+    Preprocess test set
+    """
+    test = []
+    for label, dir_ in enumerate([settings.TEST_POS, settings.TEST_NEG]):
+        print(dir_)
+        for file in tqdm(os.listdir(dir_)):
+            if file.endswith(".txt"):
+                text = open(os.path.join(dir_, file), "r").read()
+                test.append((preprocess(text, version, n), label))
+
+    print("# test samples:", len(test))
+    test_toks = []
+    for text, _ in test:
+        test_toks.extend(text)
+    print("# test toks:", len(test_toks))
+
+    pickle.dump(test, open(
+        settings.DATA_DIR + "test.{}.n={}.pkl".format(version, n), "wb"))
+    pickle.dump(test_toks, open(
+        settings.DATA_DIR + "test.{}.n={}.toks.pkl".format(version, n), "wb"))
+
+    return test, test_toks
 
 
 def build_vocab(toks, max_vocab_size):

@@ -132,6 +132,5 @@ def train(
     print("After training for n={} epochs...".format(num_epochs))
     print("Training accuracy: {}".format(eval_model(model, train_loader)))
     print("Validation accuracy: {}".format(eval_model(model, val_loader)))
-    # print("Test accuracy: {}".format(eval_model(test_loader, model)))
 
     return train_accs, val_accs

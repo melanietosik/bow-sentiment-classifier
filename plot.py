@@ -165,6 +165,34 @@ def lin_ann(e=2):
             key, max(r[key]["train"]), max(r[key]["val"])))
 
 
+def num_epochs(e=10):
+    r = pickle.load(open(r_dir + "num_epochs.pkl", "rb"))
+    fig, ax = plt.subplots(1, 1)
+    ax.set_ylim(60, 100)
+    lin = np.linspace(0, e, e * 6)
+    # # 2
+    # e = 2
+    # plt.plot(np.linspace(0, e, e * 6), r[2]["train"], color=CB[0], label="[2] train")
+    # plt.plot(np.linspace(0, e, e * 6), r[2]["val"], color=CB[0], linestyle="--", label="[2] val")
+    # # 5
+    # e = 5
+    # plt.plot(np.linspace(0, e, e * 6), r[5]["train"], color=CB[1], label="[5] train")
+    # plt.plot(np.linspace(0, e, e * 6), r[5]["val"], color=CB[1], linestyle="--", label="[5] val")
+    # 10
+    e = 10
+    plt.plot(np.linspace(0, e, e * 6), r[10]["train"], color=CB[0], label="[10] train")
+    plt.plot(np.linspace(0, e, e * 6), r[10]["val"], color=CB[0], linestyle="--", label="[10] val")
+    ax.set_title("Number of epochs [2,5,10]")
+    ax.set_xlabel("# of epochs")
+    ax.set_ylabel("train/validation accuracy")
+    ax.set_xticks(np.arange(0, e + 1, 1))
+    ax.legend()
+    plt.savefig("plots/num_epochs.eps", format="eps", dpi=1000)
+    for key in r:
+        print("epochs=[{}]; best training accuracy: {}; best validation accuracy: {}".format(
+            key, max(r[key]["train"]), max(r[key]["val"])))
+
+
 if __name__ == "__main__":
     #tokenization()
     """
@@ -246,4 +274,11 @@ if __name__ == "__main__":
     """
         lin_ann=[True];     best training accuracy: 88.78;  best validation accuracy: 85.96
         lin_ann=[False];    best training accuracy: 93.225; best validation accuracy: 88.46
+    """
+
+    #num_epochs()
+    """
+        epochs=[2];     best training accuracy: 93.095; best validation accuracy: 88.88
+        epochs=[5];     best training accuracy: 98.8;   best validation accuracy: 89.24
+        epochs=[10];    best training accuracy: 99.985; best validation accuracy: 89.42
     """
