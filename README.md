@@ -75,4 +75,13 @@ Results: `200d` > `100d` > `50d`.
 
 We will compare `Adam` vs. `SGD`, both with default parameters. SGD doesn't seem to be working well at all. We will keep using `Adam` for now.
 
+#### Linear annealing of learning rate
+
+Not helpful.
+
+#### Number of epochs
+
+
+
+
 

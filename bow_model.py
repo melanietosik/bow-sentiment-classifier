@@ -11,6 +11,7 @@ class BOW(nn.Module):
     """
     Bag-of-words (BOW) classification model
     """
+
     def __init__(self, vocab_size, emb_dim):
         """
         @param vocab_size: size of the vocabulary
@@ -64,9 +65,14 @@ def eval_model(model, loader):
     return (100 * correct / total)
 
 
-def train(model, train_loader, val_loader,
-        lr=settings.CONFIG["lr"], optim=settings.CONFIG["optim"],
-        lin_ann=settings.CONFIG["lin_ann"]):
+def train(
+        model,
+        train_loader,
+        val_loader,
+        lr=settings.CONFIG["lr"],
+        optim=settings.CONFIG["optim"],
+        lin_ann=settings.CONFIG["lin_ann"],
+        num_epochs=settings.CONFIG["num_epochs"]):
     """
     Train model
     """
@@ -91,11 +97,10 @@ def train(model, train_loader, val_loader,
         exit()
 
     if lin_ann:
-        lambda_ = \
-            lambda s: 1 - (s / (len(train_loader) * settings.CONFIG["num_epochs"]))
+        lambda_ = lambda s: 1 - (s / (len(train_loader) * num_epochs))
         scheduler = LambdaLR(optimizer, lr_lambda=lambda_)
 
-    for epoch in range(settings.CONFIG["num_epochs"]):
+    for epoch in range(num_epochs):
         for i, (data, lengths, labels) in enumerate(train_loader):
             model.train()
             data_batch, length_batch, label_batch = data, lengths, labels
@@ -117,15 +122,14 @@ def train(model, train_loader, val_loader,
                 print(
                     "Epoch: [{}/{}], Step: [{}/{}], Validation accuracy: {}, Training accuracy: {}".format(
                         epoch + 1,
-                        settings.CONFIG["num_epochs"],
+                        num_epochs,
                         i + 1,
                         len(train_loader),
                         val_acc,
                         train_acc,
                     ))
 
-    print("After training for n={} epochs...".format(
-        settings.CONFIG["num_epochs"]))
+    print("After training for n={} epochs...".format(num_epochs))
     print("Training accuracy: {}".format(eval_model(model, train_loader)))
     print("Validation accuracy: {}".format(eval_model(model, val_loader)))
     # print("Test accuracy: {}".format(eval_model(test_loader, model)))

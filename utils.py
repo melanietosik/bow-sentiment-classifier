@@ -20,6 +20,7 @@ nlp = spacy.load(
     ]
 )
 nlp.add_pipe(nlp.create_pipe("sentencizer"))
+random.seed(42)
 
 PAD_IDX = 0
 UNK_IDX = 1

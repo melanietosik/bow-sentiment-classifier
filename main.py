@@ -14,6 +14,7 @@ def trial(
     dim=settings.CONFIG["emb_dim"],
     optim=settings.CONFIG["optim"],
     lin_ann=settings.CONFIG["lin_ann"],
+    num_epochs=settings.CONFIG["num_epochs"],
 ):
     """
     Run trial
@@ -68,6 +69,7 @@ def trial(
         lr,
         optim,
         lin_ann,
+        num_epochs,
     )
     return train_acc, val_acc
 
@@ -144,18 +146,31 @@ def main():
     # print(optims)
     # pickle.dump(optims, open("results/optims.pkl", "wb"))
 
-    # Linear annealing of learning rate
-    options = [True, False]
+    # # Linear annealing of learning rate
+    # options = [True, False]
+    # results = {}
+    # for boolean in options:
+    #     print("lin_ann:", boolean)
+    #     train_acc, val_acc = trial(lin_ann=boolean)
+    #     results[str(boolean)] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(results)
+    # pickle.dump(results, open("results/annealing.pkl", "wb"))
+
+    # Number of epochs
+    epochs = [2, 5, 10]
     results = {}
-    for boolean in options:
-        print("lin_ann:", boolean)
-        train_acc, val_acc = trial(lin_ann=boolean)
-        results[str(boolean)] = {
+    for epoch in epochs:
+        print("epoch:", epoch)
+        train_acc, val_acc = trial(num_epochs=epoch)
+        results[epoch] = {
             "train": train_acc,
             "val": val_acc,
         }
     print(results)
-    pickle.dump(results, open("results/annealing.pkl", "wb"))
+    pickle.dump(results, open("results/num_epochs.pkl", "wb"))
 
 
 if __name__ == "__main__":

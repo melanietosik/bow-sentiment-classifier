@@ -11,7 +11,7 @@ NUM_CLASSES = 2
 
 CONFIG = {
     "scheme": 2,
-    "num_epochs": 2,
+    "num_epochs": 10,
     "ngram_size": 1,
     "max_vocab_size": 50000,
     "emb_dim": 200,

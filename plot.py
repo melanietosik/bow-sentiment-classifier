@@ -143,6 +143,28 @@ def optims(e=2):
             key, max(r[key]["train"]), max(r[key]["val"])))
 
 
+def lin_ann(e=2):
+    r = pickle.load(open(r_dir + "annealing.pkl", "rb"))
+    fig, ax = plt.subplots(1, 1)
+    ax.set_ylim(60, 100)
+    lin = np.linspace(0, e, e * 6)
+    # True
+    plt.plot(lin, r["True"]["train"], color=CB[0], label="[true] train")
+    plt.plot(lin, r["True"]["val"], color=CB[0], linestyle="--", label="[true] val")
+    # False
+    plt.plot(lin, r["False"]["train"], color=CB[1], label="[false] train")
+    plt.plot(lin, r["False"]["val"], color=CB[1], linestyle="--", label="[false] val")
+    ax.set_title("Linear annealing [Adam; true, false]")
+    ax.set_xlabel("# of epochs")
+    ax.set_ylabel("train/validation accuracy")
+    ax.set_xticks(np.arange(0, e + 1, 1))
+    ax.legend()
+    plt.savefig("plots/lin_ann.eps", format="eps", dpi=1000)
+    for key in r:
+        print("lin_ann=[{}]; best training accuracy: {}; best validation accuracy: {}".format(
+            key, max(r[key]["train"]), max(r[key]["val"])))
+
+
 if __name__ == "__main__":
     #tokenization()
     """
@@ -207,19 +229,21 @@ if __name__ == "__main__":
         ngrams=[4]; best training accuracy: 94.82;  best validation accuracy: 86.46
     """
 
-    emb_dims()
+    #emb_dims()
     """
         dim=[50]; best training accuracy: 89.615;   best validation accuracy: 86.48
         dim=[100]; best training accuracy: 91.525;  best validation accuracy: 87.36
         dim=[200]; best training accuracy: 93.1;    best validation accuracy: 88.14
     """
 
-    optims()
+    #optims()
     """
         optim=[adam]; best training accuracy: 93.335;   best validation accuracy: 88.66
         optim=[sgd]; best training accuracy: 65.45;     best validation accuracy: 64.66
     """
 
-
-
-
+    #lin_ann()
+    """
+        lin_ann=[True];     best training accuracy: 88.78;  best validation accuracy: 85.96
+        lin_ann=[False];    best training accuracy: 93.225; best validation accuracy: 88.46
+    """
