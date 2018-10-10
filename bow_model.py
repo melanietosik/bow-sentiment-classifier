@@ -9,7 +9,7 @@ class BOW(nn.Module):
     """
     Bag-of-words (BOW) classification model
     """
-    def __init__(self, vocab_size):
+    def __init__(self, vocab_size, emb_dim):
         """
         @param vocab_size: size of the vocabulary
         @param emb_dim: size of the word embedding
@@ -17,11 +17,11 @@ class BOW(nn.Module):
         super(BOW, self).__init__()
         self.embed = nn.Embedding(
             vocab_size,
-            settings.CONFIG["emb_dim"],
+            emb_dim,
             padding_idx=0,  # !!
         )
         self.linear = nn.Linear(
-            settings.CONFIG["emb_dim"],
+            emb_dim,
             settings.NUM_CLASSES,
         )
 

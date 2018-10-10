@@ -11,6 +11,7 @@ def trial(
     n=settings.CONFIG["ngram_size"],
     lr=settings.CONFIG["lr"],
     vocab_size=settings.CONFIG["max_vocab_size"],
+    dim=settings.CONFIG["emd_dim"],
 ):
     """
     Run trial
@@ -55,7 +56,7 @@ def trial(
 
     # BOW model
     print("Building BOW model...")
-    model = bow_model.BOW(len(id2token))
+    model = bow_model.BOW(len(id2token), dim)
 
     # Train
     train_acc, val_acc = bow_model.train(
@@ -95,20 +96,35 @@ def main():
     # print(adam_lr)
     # pickle.dump(adam_lr, open("results/adam_lr.pkl", "wb"))
 
-    # N-gram size
-    size = [1, 2, 3, 4]
-    vocab_size = 10000
-    ngrams = {}
-    for n in size:
-        train_acc, val_acc = trial(scheme=1, n=n, vocab_size=vocab_size)
-        ngrams[n] = {
+    # # N-gram size
+    # size = [1, 2, 3, 4]
+    # vocab_size = 10000
+    # ngrams = {}
+    # for n in size:
+    #     train_acc, val_acc = trial(scheme=1, n=n, vocab_size=vocab_size)
+    #     ngrams[n] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(ngrams)
+    # pickle.dump(
+    #     ngrams,
+    #     open("results/ngrams.scheme=1.vocab={}.pkl".format(vocab_size), "wb"))
+
+    # Embedding size
+    dims = [50, 100, 200]
+    emd_dims = {}
+    for dim in dims:
+        print("dim=", dim)
+        train_acc, val_acc = trial(dim=dim)
+        emd_dims[dim] = {
             "train": train_acc,
             "val": val_acc,
         }
-    print(ngrams)
+    print(emd_dims)
     pickle.dump(
-        ngrams,
-        open("results/ngrams.scheme=1.vocab={}.pkl".format(vocab_size), "wb"))
+        emd_dims,
+        open("results/emd_dims.pkl", "wb"))
 
 
 if __name__ == "__main__":

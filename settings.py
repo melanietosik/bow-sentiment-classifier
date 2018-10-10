@@ -11,10 +11,10 @@ NUM_CLASSES = 2
 
 CONFIG = {
     "scheme": 2,
-    "num_epochs": 5,
-    "ngram_size": -1,
-    "max_vocab_size": -1,
-    "emb_dim": 100,
+    "num_epochs": 2,
+    "ngram_size": 1,
+    "max_vocab_size": 50000,
+    "emb_dim": -1,
     "lr": 1e-3,
     "max_sent_len": 200,
     "batch_size": 32,
