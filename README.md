@@ -73,6 +73,6 @@ Results: `200d` > `100d` > `50d`.
 
 #### Optimizer
 
-
+We will compare `Adam` vs. `SGD`, both with default parameters. SGD doesn't seem to be working well at all. We will keep using `Adam` for now.
 
 

@@ -126,21 +126,21 @@ def main():
     # print(emb_dims)
     # pickle.dump(emb_dims, open("results/emb_dims.pkl", "wb"))
 
-    # Optimizer
-    defaults = {
-        "adam": 1e-3,
-        "sgd": 1e-2,
-    }
-    optims = {}
-    for optim in defaults:
-        print("optim:", optim)
-        train_acc, val_acc = trial(optim=optim, lr=defaults[optim])
-        optims[optim] = {
-            "train": train_acc,
-            "val": val_acc,
-        }
-    print(optims)
-    pickle.dump(optims, open("results/optims.pkl", "wb"))
+    # # Optimizer
+    # defaults = {
+    #     "adam": 1e-3,
+    #     "sgd": 1e-2,
+    # }
+    # optims = {}
+    # for optim in defaults:
+    #     print("optim:", optim)
+    #     train_acc, val_acc = trial(optim=optim, lr=defaults[optim])
+    #     optims[optim] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(optims)
+    # pickle.dump(optims, open("results/optims.pkl", "wb"))
 
 
 if __name__ == "__main__":

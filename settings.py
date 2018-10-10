@@ -15,7 +15,7 @@ CONFIG = {
     "ngram_size": 1,
     "max_vocab_size": 50000,
     "emb_dim": 200,
-    "optim": "",
+    "optim": "adam",
     "lr": 1e-3,
     "max_sent_len": 200,
     "batch_size": 32,

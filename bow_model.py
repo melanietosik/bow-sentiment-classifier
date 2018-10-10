@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim.LambdaLR
 
 import settings
 
@@ -87,6 +88,10 @@ def train(model, train_loader, val_loader,
         print("Optimizer invalid, exiting")
         exit()
 
+    lambda_ = \
+        lambda s: lr * (1 - (s / (len(train_loader) * settings.CONFIG["num_epochs"]))) 
+    scheduler = LambdaLR(optimizer, lr_lambda=lambda_)
+
     for epoch in range(settings.CONFIG["num_epochs"]):
         for i, (data, lengths, labels) in enumerate(train_loader):
             model.train()
@@ -96,6 +101,7 @@ def train(model, train_loader, val_loader,
             loss = criterion(outputs, label_batch)
             loss.backward()
             optimizer.step()
+            scheduler.step()
 
             # Validate every 100 iterations
             if i > 0 and i % 100 == 0:

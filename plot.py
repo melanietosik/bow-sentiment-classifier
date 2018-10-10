@@ -97,8 +97,7 @@ def ngrams(e=2, scheme=2, vocab_size=100000):
 
 
 def emb_dims(e=2):
-    r = pickle.load(
-        open(r_dir + "emb_dims.pkl", "rb"))
+    r = pickle.load(open(r_dir + "emb_dims.pkl", "rb"))
     fig, ax = plt.subplots(1, 1)
     ax.set_ylim(60, 100)
     lin = np.linspace(0, e, e * 6)
@@ -119,6 +118,28 @@ def emb_dims(e=2):
     plt.savefig("plots/emb_dims.eps", format="eps", dpi=1000)
     for key in r:
         print("dim=[{}]; best training accuracy: {}; best validation accuracy: {}".format(
+            key, max(r[key]["train"]), max(r[key]["val"])))
+
+
+def optims(e=2):
+    r = pickle.load(open(r_dir + "optims.pkl", "rb"))
+    fig, ax = plt.subplots(1, 1)
+    ax.set_ylim(60, 100)
+    lin = np.linspace(0, e, e * 6)
+    # Adam (lr=1e-3)
+    plt.plot(lin, r["adam"]["train"], color=CB[0], label="[adam] train")
+    plt.plot(lin, r["adam"]["val"], color=CB[0], linestyle="--", label="[adam] val")
+    # SGD (lr=1e-2)
+    plt.plot(lin, r["sgd"]["train"], color=CB[1], label="[sgd] train")
+    plt.plot(lin, r["sgd"]["val"], color=CB[1], linestyle="--", label="[sgd] val")
+    ax.set_title("Optimizer [Adam, SGD]")
+    ax.set_xlabel("# of epochs")
+    ax.set_ylabel("train/validation accuracy")
+    ax.set_xticks(np.arange(0, e + 1, 1))
+    ax.legend()
+    plt.savefig("plots/optims.eps", format="eps", dpi=1000)
+    for key in r:
+        print("optim=[{}]; best training accuracy: {}; best validation accuracy: {}".format(
             key, max(r[key]["train"]), max(r[key]["val"])))
 
 
@@ -186,10 +207,19 @@ if __name__ == "__main__":
         ngrams=[4]; best training accuracy: 94.82;  best validation accuracy: 86.46
     """
 
-    #emb_dims()
+    emb_dims()
     """
         dim=[50]; best training accuracy: 89.615;   best validation accuracy: 86.48
         dim=[100]; best training accuracy: 91.525;  best validation accuracy: 87.36
         dim=[200]; best training accuracy: 93.1;    best validation accuracy: 88.14
     """
+
+    optims()
+    """
+        optim=[adam]; best training accuracy: 93.335;   best validation accuracy: 88.66
+        optim=[sgd]; best training accuracy: 65.45;     best validation accuracy: 64.66
+    """
+
+
+
 
