@@ -97,10 +97,10 @@ def main():
 
     # N-gram size
     size = [1, 2, 3, 4]
-    max_vocab_size = 50000
+    vocab_size = 50000
     ngrams = {}
     for n in size:
-        train_acc, val_acc = trial(n=n, max_vocab_size=max_vocab_size)
+        train_acc, val_acc = trial(n=n, vocab_size=vocab_size)
         ngrams[n] = {
             "train": train_acc,
             "val": val_acc,
@@ -108,7 +108,7 @@ def main():
     print(ngrams)
     pickle.dump(
         ngrams,
-        open("results/ngrams.vocab={}.pkl".format(max_vocab_size), "wb"))
+        open("results/ngrams.vocab={}.pkl".format(vocab_size), "wb"))
 
 
 if __name__ == "__main__":
