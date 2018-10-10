@@ -146,6 +146,7 @@ def main():
 
     # Linear annealing of learning rate
     options = [True, False]
+    results = {}
     for boolean in options:
         print("lin_ann:", boolean)
         train_acc, val_acc = trial(lin_ann=boolean)
