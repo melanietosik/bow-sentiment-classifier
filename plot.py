@@ -96,6 +96,32 @@ def ngrams(e=2, scheme=2, vocab_size=100000):
             key, max(r[key]["train"]), max(r[key]["val"])))
 
 
+def emb_dims(e=2):
+    r = pickle.load(
+        open(r_dir + "emb_dims.pkl", "rb"))
+    fig, ax = plt.subplots(1, 1)
+    ax.set_ylim(60, 100)
+    lin = np.linspace(0, e, e * 6)
+    # 50
+    plt.plot(lin, r[50]["train"], color=CB[0], label="[50] train")
+    plt.plot(lin, r[50]["val"], color=CB[0], linestyle="--", label="[50] val")
+    # 100
+    plt.plot(lin, r[100]["train"], color=CB[1], label="[100] train")
+    plt.plot(lin, r[100]["val"], color=CB[1], linestyle="--", label="[100] val")
+    # 200
+    plt.plot(lin, r[200]["train"], color=CB[2], label="[200] train")
+    plt.plot(lin, r[200]["val"], color=CB[2], linestyle="--", label="[200] val")
+    ax.set_title("Embedding dimensions [50, 100, 200]")
+    ax.set_xlabel("# of epochs")
+    ax.set_ylabel("train/validation accuracy")
+    ax.set_xticks(np.arange(0, e + 1, 1))
+    ax.legend()
+    plt.savefig("plots/emb_dims.eps", format="eps", dpi=1000)
+    for key in r:
+        print("dim=[{}]; best training accuracy: {}; best validation accuracy: {}".format(
+            key, max(r[key]["train"]), max(r[key]["val"])))
+
+
 if __name__ == "__main__":
     #tokenization()
     """
@@ -158,5 +184,12 @@ if __name__ == "__main__":
         ngrams=[2]; best training accuracy: 95.88;  best validation accuracy: 86.72
         ngrams=[3]; best training accuracy: 94.79;  best validation accuracy: 87.28
         ngrams=[4]; best training accuracy: 94.82;  best validation accuracy: 86.46
+    """
+
+    #emb_dims()
+    """
+        dim=[50]; best training accuracy: 89.615;   best validation accuracy: 86.48
+        dim=[100]; best training accuracy: 91.525;  best validation accuracy: 87.36
+        dim=[200]; best training accuracy: 93.1;    best validation accuracy: 88.14
     """
 

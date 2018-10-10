@@ -65,9 +65,10 @@ We will stick with a learning of `1e-3` for Adam for now. It looks like we can a
 
 ####  N-gram and vocabulary size
 
-Testing n-gram sizes between `[1-4]` surprisingly did not yield very promising results. Evaluating different vocabulary sizes [`10k, 50k, 100k`] did not significantly affect model performance either. Reverting the tokenization scheme back to `[1]` and _including_ stop words and punctuation improves the results, especially when using bigrams over unigrams. Increasing the number of epochs to 5 again was necessary for the learning curve to converge. Still, the best results are consistently achieved with the more rigorous tokenization scheme `[2]` and using unigrams [`n=1`] only.
+Testing n-gram sizes between `[1-4]` surprisingly did not yield very promising results. Evaluating different vocabulary sizes [`10k, 50k, 100k`] did not significantly affect model performance either. Reverting the tokenization scheme back to `[1]` and _including_ stop words and punctuation improves the results, especially when using bigrams over unigrams. Increasing the number of epochs to 5 again was necessary for the learning curve to converge. Still, the best results are consistently achieved with the more rigorous tokenization scheme `[2]` and using unigrams [`n=1`] with a maximum vocabulary size of `[50k`].
 
 #### Embedding size
 
+Results: `200d` > `100d` > `50d`.
 
 #### Optimizer

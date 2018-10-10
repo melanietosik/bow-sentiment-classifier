@@ -62,7 +62,8 @@ def eval_model(model, loader):
     return (100 * correct / total)
 
 
-def train(model, train_loader, val_loader, lr=settings.CONFIG["lr"]):
+def train(model, train_loader, val_loader,
+        lr=settings.CONFIG["lr"], optim=settings.CONFIG["optim"]):
     """
     Train model
     """
@@ -72,10 +73,19 @@ def train(model, train_loader, val_loader, lr=settings.CONFIG["lr"]):
 
     # Criterion and optimizer
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(
-        model.parameters(),
-        lr=lr,
+    if optim == "adam":
+        optimizer = torch.optim.Adam(
+            model.parameters(),
+            lr=lr,
+        )
+    elif optim == "sgd":
+        optimizer = torch.optim.SGD(
+            model.parameters(),
+            lr=lr,
     )
+    else:
+        print("Optimizer invalid, exiting")
+        exit()
 
     for epoch in range(settings.CONFIG["num_epochs"]):
         for i, (data, lengths, labels) in enumerate(train_loader):

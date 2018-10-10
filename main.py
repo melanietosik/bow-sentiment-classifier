@@ -12,6 +12,7 @@ def trial(
     lr=settings.CONFIG["lr"],
     vocab_size=settings.CONFIG["max_vocab_size"],
     dim=settings.CONFIG["emb_dim"],
+    optim=settings.CONFIG["optim"],
 ):
     """
     Run trial
@@ -64,6 +65,7 @@ def trial(
         train_loader,
         val_loader,
         lr,
+        optim,
     )
     return train_acc, val_acc
 
@@ -111,20 +113,31 @@ def main():
     #     ngrams,
     #     open("results/ngrams.scheme=1.vocab={}.pkl".format(vocab_size), "wb"))
 
-    # Embedding size
-    dims = [50, 100, 200]
-    emd_dims = {}
-    for dim in dims:
-        print("dim=", dim)
-        train_acc, val_acc = trial(dim=dim)
-        emd_dims[dim] = {
+    # # Embedding size
+    # dims = [50, 100, 200]
+    # emb_dims = {}
+    # for dim in dims:
+    #     print("dim=", dim)
+    #     train_acc, val_acc = trial(dim=dim)
+    #     emb_dims[dim] = {
+    #         "train": train_acc,
+    #         "val": val_acc,
+    #     }
+    # print(emb_dims)
+    # pickle.dump(emb_dims, open("results/emb_dims.pkl", "wb"))
+
+    # Optimizer
+    options = ["adam", "sgd"]
+    optims = {}
+    for optim in options:
+        print("optim=", optim)
+        train_acc, val_acc = trial(optim=optim)
+        optims[optim] = {
             "train": train_acc,
             "val": val_acc,
         }
-    print(emd_dims)
-    pickle.dump(
-        emd_dims,
-        open("results/emd_dims.pkl", "wb"))
+    print(optims)
+    pickle.dump(optims, open("results/optims.pkl", "wb"))
 
 
 if __name__ == "__main__":
