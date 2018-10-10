@@ -72,7 +72,8 @@ def train(
         lr=settings.CONFIG["lr"],
         optim=settings.CONFIG["optim"],
         lin_ann=settings.CONFIG["lin_ann"],
-        num_epochs=settings.CONFIG["num_epochs"]):
+        num_epochs=settings.CONFIG["num_epochs"],
+):
     """
     Train model
     """
@@ -91,13 +92,14 @@ def train(
         optimizer = torch.optim.SGD(
             model.parameters(),
             lr=lr,
-    )
+        )
     else:
         print("Optimizer invalid, exiting")
         exit()
 
     if lin_ann:
-        lambda_ = lambda s: 1 - (s / (len(train_loader) * num_epochs))
+        def lambda_(s):
+            return 1 - (s / (len(train_loader) * num_epochs))
         scheduler = LambdaLR(optimizer, lr_lambda=lambda_)
 
     for epoch in range(num_epochs):
@@ -133,4 +135,4 @@ def train(
     print("Training accuracy: {}".format(eval_model(model, train_loader)))
     print("Validation accuracy: {}".format(eval_model(model, val_loader)))
 
-    return train_accs, val_accs
+    return train_accs, val_accs, model

@@ -63,7 +63,7 @@ def trial(
     model = bow_model.BOW(len(id2token), dim)
 
     # Train
-    train_acc, val_acc = bow_model.train(
+    train_acc, val_acc, model = bow_model.train(
         model,
         train_loader,
         val_loader,
@@ -91,8 +91,8 @@ def trial(
         test_samples, test_targets = zip(*test)
         test_idxs = utils.tok2idx_data(token2id, test_samples)
         test_loader = torch_data_loader.get(test_idxs, test_targets, shuffle=False)
-        test_acc = bow_model.eval_model(test_loader, bow_model)
-        print("Test accuracy: {}".format(test_acc))
+        print("Testing accuracy: {}".format(
+            bow_model.eval_model(model, test_loader)))
 
     return train_acc, val_acc
 
