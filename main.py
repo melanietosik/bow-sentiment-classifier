@@ -117,7 +117,7 @@ def main():
     # dims = [50, 100, 200]
     # emb_dims = {}
     # for dim in dims:
-    #     print("dim=", dim)
+    #     print("dim:", dim)
     #     train_acc, val_acc = trial(dim=dim)
     #     emb_dims[dim] = {
     #         "train": train_acc,
@@ -127,11 +127,14 @@ def main():
     # pickle.dump(emb_dims, open("results/emb_dims.pkl", "wb"))
 
     # Optimizer
-    options = ["adam", "sgd"]
+    defaults = {
+        "adam": 1e-3,
+        "sgd": 1e-2,
+    }
     optims = {}
-    for optim in options:
-        print("optim=", optim)
-        train_acc, val_acc = trial(optim=optim)
+    for optim in defaults:
+        print("optim:", optim)
+        train_acc, val_acc = trial(optim=optim, lr=defaults[optim])
         optims[optim] = {
             "train": train_acc,
             "val": val_acc,
