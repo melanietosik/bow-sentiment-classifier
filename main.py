@@ -11,7 +11,7 @@ def trial(
     n=settings.CONFIG["ngram_size"],
     lr=settings.CONFIG["lr"],
     vocab_size=settings.CONFIG["max_vocab_size"],
-    dim=settings.CONFIG["emd_dim"],
+    dim=settings.CONFIG["emb_dim"],
 ):
     """
     Run trial
