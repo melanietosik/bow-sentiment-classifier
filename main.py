@@ -13,6 +13,7 @@ def trial(
     vocab_size=settings.CONFIG["max_vocab_size"],
     dim=settings.CONFIG["emb_dim"],
     optim=settings.CONFIG["optim"],
+    lin_ann=settings.CONFIG["lin_ann"],
 ):
     """
     Run trial
@@ -66,6 +67,7 @@ def trial(
         val_loader,
         lr,
         optim,
+        lin_ann,
     )
     return train_acc, val_acc
 
@@ -143,11 +145,14 @@ def main():
     # pickle.dump(optims, open("results/optims.pkl", "wb"))
 
     # Linear annealing of learning rate
-    train_acc, val_acc = trial()
-    results = {
-        "train": train_acc,
-        "val": val_acc,
-    }
+    options = [True, False]
+    for boolean in options:
+        print("lin_ann:", boolean)
+        train_acc, val_acc = trial(lin_ann=boolean)
+        results[str(boolean)] = {
+            "train": train_acc,
+            "val": val_acc,
+        }
     print(results)
     pickle.dump(results, open("results/annealing.pkl", "wb"))
 

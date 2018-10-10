@@ -17,6 +17,7 @@ CONFIG = {
     "emb_dim": 200,
     "optim": "adam",
     "lr": 1e-3,
+    "lin_ann": False,
     "max_sent_len": 200,
     "batch_size": 32,
 }

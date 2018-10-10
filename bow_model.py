@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim.LambdaLR
+
+from torch.optim.lr_scheduler import LambdaLR
 
 import settings
 
@@ -64,7 +65,8 @@ def eval_model(model, loader):
 
 
 def train(model, train_loader, val_loader,
-        lr=settings.CONFIG["lr"], optim=settings.CONFIG["optim"]):
+        lr=settings.CONFIG["lr"], optim=settings.CONFIG["optim"],
+        lin_ann=settings.CONFIG["lin_ann"]):
     """
     Train model
     """
@@ -88,9 +90,10 @@ def train(model, train_loader, val_loader,
         print("Optimizer invalid, exiting")
         exit()
 
-    lambda_ = \
-        lambda s: lr * (1 - (s / (len(train_loader) * settings.CONFIG["num_epochs"]))) 
-    scheduler = LambdaLR(optimizer, lr_lambda=lambda_)
+    if lin_ann:
+        lambda_ = \
+            lambda s: 1 - (s / (len(train_loader) * settings.CONFIG["num_epochs"]))
+        scheduler = LambdaLR(optimizer, lr_lambda=lambda_)
 
     for epoch in range(settings.CONFIG["num_epochs"]):
         for i, (data, lengths, labels) in enumerate(train_loader):
@@ -101,7 +104,9 @@ def train(model, train_loader, val_loader,
             loss = criterion(outputs, label_batch)
             loss.backward()
             optimizer.step()
-            scheduler.step()
+
+            if lin_ann:
+                scheduler.step()
 
             # Validate every 100 iterations
             if i > 0 and i % 100 == 0:
