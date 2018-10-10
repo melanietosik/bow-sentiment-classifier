@@ -1,0 +1,41 @@
+Loading data...
+Building vocabulary...
+Converting tokens to indices...
+Creating PyTorch data loaders...
+Building BOW model...
+Epoch: [1/2], Step: [101/625], Validation accuracy: 70.88, Training accuracy: 70.825
+Epoch: [1/2], Step: [201/625], Validation accuracy: 77.36, Training accuracy: 78.0
+Epoch: [1/2], Step: [301/625], Validation accuracy: 81.04, Training accuracy: 82.195
+Epoch: [1/2], Step: [401/625], Validation accuracy: 83.74, Training accuracy: 84.86
+Epoch: [1/2], Step: [501/625], Validation accuracy: 85.28, Training accuracy: 86.76
+Epoch: [1/2], Step: [601/625], Validation accuracy: 86.2, Training accuracy: 88.095
+Epoch: [2/2], Step: [101/625], Validation accuracy: 86.96, Training accuracy: 89.465
+Epoch: [2/2], Step: [201/625], Validation accuracy: 87.46, Training accuracy: 90.255
+Epoch: [2/2], Step: [301/625], Validation accuracy: 88.02, Training accuracy: 90.96
+Epoch: [2/2], Step: [401/625], Validation accuracy: 88.26, Training accuracy: 91.7
+Epoch: [2/2], Step: [501/625], Validation accuracy: 88.52, Training accuracy: 92.4
+Epoch: [2/2], Step: [601/625], Validation accuracy: 88.66, Training accuracy: 93.0
+After training for n=2 epochs...
+Training accuracy: 93.15
+Validation accuracy: 88.7
+
+Loading test data...
+Testing accuracy: 86.212
+
+Validation samples with correct predictions:
+
+#1
+ neil simon piece work lot praises odd couple kind gem lingers felix lemmon hypochondriac fussy neat freak big thorn roommate oscar matthau total slob men great jobs felix news writer oscar sports writer men divorced felix wife nearby oscar west coast men living roof driving crazy impossible improbable lot laughs lot fun liked british neighbors speak gentlemen oscar kicked felix lucky lives refused dinner night earlier time felix needed lighten guess neat freaks neat lighten fussy patient fun movie <unk> classic neil simon odd couple classic movie stars
+#2
+ orphanage manager vacation father details center winds renting kids couple nice apartment great life notion adopt idea tailor want spoil elegant existence trio <unk> carpet creepers way people like need kids life wonderful movie look like real world works way picture <unk>
+#3
+ oh come people film break thing liked sorry thinking oh yeah john wayne came shot bad guys oh sorry wrong movie thinking better quality film let trying defend oh yeah chick clueless stacy dash mean mistakes boy stacy thing western female cast actually hung woman gallows western neck broken survived ordeal director effort trying western woman lynched horse western happen movie thought director idea gang right ed wood bride monster maybe makers film <unk> especially african woman cast oriental makers gang roses want sequel mess slang like hey <unk> <unk> talk hand baby talk hand surfer dude type deputy marshal things like gunfight totally rad man totally know things like
+
+Validation samples with incorrect predictions:
+
+#1
+ good movie preachy story line sub par ok superb fell asleep story young flies want adventure follow characters lacking truly care characters feel adult interested pixar liked special effects <unk> like fly jokes mom constantly lord flies pretty sexist women house wives fainting
+#2
+ awful cundieff idea better like spinal tap film clever start surprising mid nineties performances played laughs cartoon characters like marx brothers guys real slightly diverse react situations like throw tantrum performance hats late gig pull guns beat record company exec picture seriously reel hooked rent costs rap music leave gassing loud comparing like comparing george lucas star wars gil rogers think point
+#3
+ matches <unk> warriors ultimate warrior texas tornado legion doom v perfect team mr perfect ax smash crush demolition ax seconds warrior splashes pin <unk> warriors knew ax healthy man unhealthy bother card ppv eventually legion doom demolition job cheaply double disqualification <unk> warriors perfect applies perfect <unk> texas tornado pin attempts warrior warrior sells kicks warrior comes splash pin perfect sole survivor dream team dusty rhodes koko b ware hart foundation v million dollar team ted dibiase mystery partner rhythm blues mystery partner undertaker debut impact disposing koko straight away manages correct height weight finishing pretending know dibiase team <unk> power slams honky pin career wwf shortly <unk> falls victim dibiase help virgil <unk> dibiase team rhodes undertaker double axe handle rope leave quietly attacking brother love undertaker dusty counted despite legal man <unk> dibiase team straight greg caught cradle hart trying figure leg lock pinned comes hart v dibiase minutes nice wrestling bret body cross reversed dibiase pin dibiase sole survivor hart good use <unk> jake snake roberts superfly jimmy <unk> rockers v visionaries rick model martel warlord power glory spending time ring marty jannetty power slammed warlord comes rope pin <unk> visionaries <unk> pinned seconds martel reverses body

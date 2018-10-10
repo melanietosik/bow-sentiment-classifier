@@ -79,7 +79,7 @@ def trial(
     if test:
         try:
             # Load preprocessed data
-            print("Loading test data...")
+            print("\nLoading test data...")
             test = pickle.load(open(
                 settings.DATA_DIR + "test.{}.n={}.pkl".format(scheme, n), "rb"))
             test_toks = pickle.load(open(
@@ -96,11 +96,11 @@ def trial(
 
         # Identify correct/incorrect predictions
         right, wrong = bow_model.eval_model(model, val_loader, inspect=True)
-        print("Validation samples with correct predictions:")
+        print("\nValidation samples with correct predictions:\n")
         for i, item in enumerate(right):
             text = " ".join([id2token[idx] for idx in item if idx > 0])
             print("#{}\n {}".format(i + 1, text))
-        print("Validation samples with incorrect predictions:")
+        print("\nValidation samples with incorrect predictions:\n")
         for i, item in enumerate(wrong):
             text = " ".join([id2token[idx] for idx in item if idx > 0])
             print("#{}\n {}".format(i + 1, text))
