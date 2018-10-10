@@ -50,7 +50,7 @@ def preprocess(text, version, n):
     # Scheme 1
     elif version == 1:
         doc = nlp(text)
-        prep = [tok.text for tok in text]
+        prep = [tok.text for tok in doc]
         return ["_".join(ngram) for ngram in ngrams(prep, n)]
     # Scheme 2
     elif version == 2:
