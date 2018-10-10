@@ -41,7 +41,7 @@ See `main.py` for the main script to run. Change default parameter settings in `
 - N-gram size
 - Vocabulary size
 - Embedding size
-- Optimimizer (Adam vs. SGD)
+- Optimimizer (`adam` vs. `sgd`)
 - Learning rate
 
 #### Tokenization
@@ -73,7 +73,7 @@ Results: `200d` > `100d` > `50d`.
 
 #### Optimizer
 
-We will compare `Adam` vs. `SGD`, both with default parameters. SGD doesn't seem to be working well at all. We will keep using `Adam` for now.
+We will compare `adam` vs. `sgd`, both with default parameters. `sgd` doesn't seem to be working well at all. We will keep using `adam` for now.
 
 #### Linear annealing of learning rate
 
@@ -82,3 +82,7 @@ Not helpful.
 #### Number of epochs
 
 Training for `2` epochs seems sufficient, otherwise the model starts to overfit on the training data.
+
+### Testing accuracy
+
+Final accuracy on the testing set: `86.212`.
