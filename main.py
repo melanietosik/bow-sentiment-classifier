@@ -97,7 +97,7 @@ def main():
 
     # N-gram size
     size = [1, 2, 3, 4]
-    vocab_size = 50000
+    vocab_size = 10000
     ngrams = {}
     for n in size:
         train_acc, val_acc = trial(scheme=1, n=n, vocab_size=vocab_size)
