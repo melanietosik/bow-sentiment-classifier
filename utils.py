@@ -121,7 +121,7 @@ def preprocess_dataset(version, n):
     return train, train_toks, val, val_toks
 
 
-def build_vocab(toks):
+def build_vocab(toks, max_vocab_size):
     """
     - id2token:
         list of tokens;
@@ -131,7 +131,7 @@ def build_vocab(toks):
         keys represent tokens, corresponding values represent indices
     """
     ngram_cnt = Counter(toks)
-    vocab, cnt = zip(*ngram_cnt.most_common(settings.CONFIG["max_vocab_size"]))
+    vocab, cnt = zip(*ngram_cnt.most_common(max_vocab_size))
 
     id2token = list(vocab)
     token2id = dict(zip(vocab, range(2, 2 + len(vocab))))
@@ -140,10 +140,10 @@ def build_vocab(toks):
     token2id["<pad>"] = PAD_IDX
     token2id["<unk>"] = UNK_IDX
 
-    rand_tok_id = random.randint(0, len(id2token) - 1)
-    rand_tok = id2token[rand_tok_id]
-    print(rand_tok_id, id2token[rand_tok_id])
-    print(rand_tok, token2id[rand_tok])
+    # rand_tok_id = random.randint(0, len(id2token) - 1)
+    # rand_tok = id2token[rand_tok_id]
+    # print(rand_tok_id, id2token[rand_tok_id])
+    # print(rand_tok, token2id[rand_tok])
 
     return token2id, id2token
 

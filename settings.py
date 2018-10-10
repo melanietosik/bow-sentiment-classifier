@@ -13,7 +13,7 @@ CONFIG = {
     "scheme": 2,
     "num_epochs": 2,
     "ngram_size": -1,
-    "max_vocab_size": 10000,
+    "max_vocab_size": -1,
     "emb_dim": 100,
     "lr": 1e-3,
     "max_sent_len": 200,

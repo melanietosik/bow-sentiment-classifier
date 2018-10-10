@@ -58,6 +58,8 @@ Going to stick with 1e-3 and reduce the number of epochs from 10 to 2.
 
 ### N-gram size
 
+Not conclusive, try increasing vocab size.
+
 
 
 

@@ -10,6 +10,7 @@ def trial(
     scheme=settings.CONFIG["scheme"],
     n=settings.CONFIG["ngram_size"],
     lr=settings.CONFIG["lr"],
+    vocab_size=settings.CONFIG["max_vocab_size"],
 ):
     """
     Run trial
@@ -36,7 +37,7 @@ def trial(
 
     # Build vocab
     print("Building vocabulary...")
-    token2id, id2token = utils.build_vocab(train_toks)
+    token2id, id2token = utils.build_vocab(train_toks, vocab_size)
 
     # Convert tokens to IDs
     print("Converting tokens to indices...")
@@ -96,15 +97,18 @@ def main():
 
     # N-gram size
     size = [1, 2, 3, 4]
+    max_vocab_size = 50000
     ngrams = {}
     for n in size:
-        train_acc, val_acc = trial(n=n)
+        train_acc, val_acc = trial(n=n, max_vocab_size=max_vocab_size)
         ngrams[n] = {
             "train": train_acc,
             "val": val_acc,
         }
     print(ngrams)
-    pickle.dump(ngrams, open("results/ngrams.pkl", "wb"))
+    pickle.dump(
+        ngrams,
+        open("results/ngrams.vocab={}.pkl".format(max_vocab_size), "wb"))
 
 
 if __name__ == "__main__":
