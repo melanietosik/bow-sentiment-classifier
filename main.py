@@ -142,6 +142,15 @@ def main():
     # print(optims)
     # pickle.dump(optims, open("results/optims.pkl", "wb"))
 
+    # Linear annealing of learning rate
+    train_acc, val_acc = trial()
+    results = {
+        "train": train_acc,
+        "val": val_acc,
+    }
+    print(results)
+    pickle.dump(results, open("results/annealing.pkl", "wb"))
+
 
 if __name__ == "__main__":
     main()
